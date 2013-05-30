@@ -1,0 +1,7 @@
+*.la
+*.lo
+*.slo
+*.o
+.libs
+.project
+.cproject
