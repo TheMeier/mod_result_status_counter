@@ -1,0 +1,15 @@
+Source: libapache2-mod-result-status-counter-gmx
+Section: web
+Priority: optional
+Maintainer: Christoph Maser <Christoph.Maser@1und1.de>
+Build-Depends: debhelper (>> 4.0.0), apache2-gmx-threaded-dev (>= 2.0)
+Homepage: https://github.com/TheMeier/mod_result_status_counter/
+Standards-Version: 3.7.0
+
+Package: libapache2-mod-result-status-counter-gmx
+Architecture: any
+Depends: apache2.2-gmx-common, ${shlibs:Depends}
+Description: On the fly statistics support for apache2
+  This apache module counts the result status of each request handled by apache httpd.
+  The counters can be fetched via a module_hablder witch outputs a simple json array.
+  This is handy for monitoring.

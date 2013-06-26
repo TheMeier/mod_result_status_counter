@@ -1,0 +1,52 @@
+#!/usr/bin/make -f
+# Sample debian/rules that uses debhelper.
+# GNU copyright 1997 to 1999 by Joey Hess.
+
+# Script adapted from Alberto Gonzalez Iniesta's package libapache-mod-dosevasive
+# This is the debhelper compatability version to use.
+#export DH_COMPAT=3
+
+build: build-stamp
+build-stamp:
+	dh_testdir
+	/opt/gmx/apache2/bin/apxs2 -c mod_result_status_counter.c
+	touch build-stamp
+
+clean:
+	dh_testdir
+	dh_testroot
+	rm -f build-stamp 
+	rm -f mod_result_status_counter.la mod_result_status_counter.lo mod_result_status_counter.slo mod_result_status_counter.o
+	rm -rf .libs
+	dh_clean
+
+install: build 
+	dh_testdir
+	dh_testroot
+	dh_clean -k
+	dh_installdirs
+	dh_install
+
+# Build architecture-independent files here.
+binary-indep: build install
+# We have nothing to do by default.
+
+# Build architecture-dependent files here.
+binary-arch: build install
+	dh_testdir 
+	dh_testroot 
+	dh_installdocs 
+	dh_installexamples 
+	dh_installchangelogs 
+	dh_link 
+	dh_strip 
+	dh_compress 
+	dh_fixperms 
+	dh_installdeb 
+	dh_shlibdeps 
+	dh_gencontrol 
+	dh_md5sums 
+	dh_builddeb 
+
+binary: binary-indep binary-arch
+.PHONY: build clean binary-indep binary-arch binary install
