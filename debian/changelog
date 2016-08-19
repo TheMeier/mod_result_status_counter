@@ -1,0 +1,5 @@
+libapache2-mod-result-status-counter (1.0.0-1) unstable; urgency=low
+
+  * initial package
+
+ -- Christoph Maser <christoph.maser@1und1.de>  Fri, 19 Aug 2016 15:35:12 +0200

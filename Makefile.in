@@ -1,0 +1,14 @@
+LIBEXECDIR=@LIBEXECDIR@
+APXS=@APXS@
+INSTALL=@INSTALL@
+
+
+mod_result_status_counter.so:
+	apxs -c mod_result_status_counter.c
+	@ln -s .libs/mod_result_status_counter.so mod_result_status_counter.so
+
+
+install: mod_result_status_counter.so
+	$(INSTALL) -d $(DESTDIR)$(LIBEXECDIR)
+	$(INSTALL) mod_result_status_counter.so $(DESTDIR)$(LIBEXECDIR)
+

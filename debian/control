@@ -1,0 +1,19 @@
+Source: libapache2-mod-result-status-counter
+Section: httpd
+Priority: optional
+Build-Depends: debhelper (>= 9), dh-autoreconf, dh-apache2, apache2-dev (>> 2.4~)
+Maintainer: Christoph Maser <christoph.maser@1und1.de>
+X-Python-Version: 2.7
+Vcs-Git: https://git.mamdev.server.lan/pocu/mod_result_status_counter
+Vcs-Browser: https://git.mamdev.server.lan/pocu/mod_result_status_counter
+Homepage: https://git.mamdev.server.lan/pocu/mod_result_status_counter
+Standards-Version: 3.9.5
+
+Package: libapache2-mod-result-status-counter
+Architecture: any
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Description: apache module to count status codes of requests
+ This apache module counts the result status of each request handled by apache httpd. 
+ The counters can be fetched via a module_hablder wicht outputs a simple json array. i
+ This is handy to do some monitoruing.
+

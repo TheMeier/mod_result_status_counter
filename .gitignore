@@ -5,3 +5,11 @@
 .libs
 .project
 .cproject
+mod_result_status_counter.so
+autom4te.cache
+Makefile
+config.log
+config.status
+configure
+debian/libapache2-mod-result-status-counter*
+debian/autoreconf*
