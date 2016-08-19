@@ -5,12 +5,12 @@ This apache module counts the result status of each request handled by apache ht
 
 To use compile with apxs, add a location handler an LoadModule directive to your config:
 
-
+```xml
 LoadModule result_status_counter_module modules/mod_result_status_counter.so
 <Location /mrsc>
    SetHandler request_status_counter
 </Location>
-
+```
 
 
 FIXME:
