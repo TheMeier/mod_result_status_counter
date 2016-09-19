@@ -12,3 +12,7 @@ install: mod_result_status_counter.so
 	$(INSTALL) -d $(DESTDIR)$(LIBEXECDIR)
 	$(INSTALL) mod_result_status_counter.so $(DESTDIR)$(LIBEXECDIR)
 
+clean:
+	rm -f mod_result_status_counter.la mod_result_status_counter.lo mod_result_status_counter.slo mod_result_status_counter.so
+	rm -rf .libs
+

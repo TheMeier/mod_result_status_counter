@@ -13,3 +13,4 @@ config.status
 configure
 debian/libapache2-mod-result-status-counter*
 debian/autoreconf*
+debian/files
