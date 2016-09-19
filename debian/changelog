@@ -1,3 +1,9 @@
+libapache2-mod-result-status-counter (1.0.1-1) unstable; urgency=medium
+
+  * update response code array
+
+ -- Christoph Maser <christoph.maser@1und1.de>  Mon, 19 Sep 2016 16:18:23 +0200
+
 libapache2-mod-result-status-counter (1.0.0-1) unstable; urgency=low
 
   * initial package
