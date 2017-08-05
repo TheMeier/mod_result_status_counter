@@ -289,19 +289,35 @@ static int mrsc_handler(request_rec *r)
         return DECLINED;
     }
 
-    r->content_type = "text/json";
     base = (mrsc_data *)apr_shm_baseaddr_get(mrsc_shm);
 
     if (!r->header_only) {
-        ap_rputs("[\n", r);
-        for (i = 0; i < RESPONSE_CODES; ++i) {
-            if (status_lines[i] == '\0') {
-        	   ap_rprintf(r, "\t{ \"%s apache code %d\": %d },\n", "unknown", i ,base->request_status[i]);
-            } else {
-                ap_rprintf(r, "\t{ \"%s\": %d },\n", status_lines[i] ,base->request_status[i]);
+        if (r->args) {
+            if (ap_strstr_c(r->args, "prometheus")) {
+                r->content_type = "text/plain; version=0.0.4";
+                ap_rputs("# HELP http_requests_total The total number of HTTP requests.\n",r);
+                ap_rputs("# TYPE http_requests_total counter\n",r);
+                for (i = 0; i < RESPONSE_CODES; ++i) {
+                    if (status_lines[i] == '\0') {
+                	   ap_rprintf(r, "http_requests_total{status=\"%s apache code %d\"}  %d\n", "unknown", i ,base->request_status[i]);
+                    } else {
+                        ap_rprintf(r, "http_requests_total{status=\"%s\"}  %d\n", status_lines[i] ,base->request_status[i]);
+                    }
+                }
             }
+        } else {
+            r->content_type = "text/json";
+
+            ap_rputs("[\n", r);
+            for (i = 0; i < RESPONSE_CODES; ++i) {
+                if (status_lines[i] == '\0') {
+            	   ap_rprintf(r, "\t{ \"%s apache code %d\": %d },\n", "unknown", i ,base->request_status[i]);
+                } else {
+                    ap_rprintf(r, "\t{ \"%s\": %d },\n", status_lines[i] ,base->request_status[i]);
+                }
+            }
+            ap_rputs("]", r);
         }
-        ap_rputs("]", r);
 
     }
     return OK;

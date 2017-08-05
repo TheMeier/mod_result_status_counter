@@ -1,4 +1,11 @@
-libapache2-mod-result-status-counter (1.0.1-1) unstable; urgency=medium
+libapache2-mod-result-status-counter (1.1.0-1) unstable; urgency=medium
+
+  * add simple text only prometheus output
+  * add test
+
+ -- Christoph Maser <christoph.maser@1und1.de>  Sat, 05 Sep 2017 09:55:23 +0200
+
+ libapache2-mod-result-status-counter (1.0.1-1) unstable; urgency=medium
 
   * update response code array
 
