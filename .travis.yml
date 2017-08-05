@@ -1,0 +1,16 @@
+language: c
+dist: trusty
+sudo: false
+addons:
+  apt:
+    packages:
+      - debhelper
+      - dh-autoreconf
+      - dh-apache2
+      - apache2-bin
+      - apache2-dev
+      - apache2-utils
+script:
+  - autoconf
+  - ./configure
+  - make test

@@ -16,3 +16,6 @@ clean:
 	rm -f mod_result_status_counter.la mod_result_status_counter.lo mod_result_status_counter.slo mod_result_status_counter.so
 	rm -rf .libs
 
+.PHONY: test
+test: mod_result_status_counter.so
+	./test.sh

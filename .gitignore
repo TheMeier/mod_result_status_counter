@@ -5,6 +5,9 @@
 .libs
 .project
 .cproject
+.vscode
+test/test.log
+test/test.output
 mod_result_status_counter.so
 autom4te.cache
 Makefile
