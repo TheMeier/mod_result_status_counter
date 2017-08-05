@@ -9,6 +9,7 @@ libexecdir=`apxs -q libexecdir`
 COMMAND="${bindir}/${progname}"
 TESTCONFIG="${PWD}/test.conf"
 TESTLOG="./test.log"
+rm -f modules
 
 function finish {
     kill `cat test.pid`

@@ -17,5 +17,5 @@ clean:
 	rm -rf .libs
 
 .PHONY: test
-test: mod_result_status_counter.so
+test: clean mod_result_status_counter.so
 	./test.sh

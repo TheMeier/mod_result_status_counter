@@ -295,7 +295,11 @@ static int mrsc_handler(request_rec *r)
     if (!r->header_only) {
         ap_rputs("[\n", r);
         for (i = 0; i < RESPONSE_CODES; ++i) {
-        	ap_rprintf(r, "\t{ \"%s\": %d },\n", status_lines[i] ,base->request_status[i]);
+            if (status_lines[i] == '\0') {
+        	   ap_rprintf(r, "\t{ \"%s apache code %d\": %d },\n", "unknown", i ,base->request_status[i]);
+            } else {
+                ap_rprintf(r, "\t{ \"%s\": %d },\n", status_lines[i] ,base->request_status[i]);
+            }
         }
         ap_rputs("]", r);
 
