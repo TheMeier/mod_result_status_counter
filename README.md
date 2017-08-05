@@ -1,5 +1,7 @@
-mod_result_status_counters
+## mod_result_status_counters
 __________________________
+
+[![Build Status](https://travis-ci.org/TheMeier/mod_result_status_counter.svg?branch=master)](https://travis-ci.org/TheMeier/mod_result_status_counter)
 
 This apache module counts the result status of each request handled by apache httpd. The counters can be fetched via a module_hablder wicht outputs a simple json array. This is hand to do some monitoruing.
 
