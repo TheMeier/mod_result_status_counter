@@ -25,15 +25,14 @@ PID=$!
 
 sleep 2
 
+rm -f test.output*
+
 ab -n 10 http://localhost:8080/mrsc
 ab -n 10 http://localhost:8080/
 
 curl -o test.output -q http://localhost:8080/mrsc
 
-grep '{ "200 OK": 10 }' test.output
-grep '{ "404 Not Found": 10 }' test.output
+cat test.output
+grep 'http_requests_count_total{status="200 OK"}  11' test.output
+grep 'http_requests_count_total{status="404 Not Found"}  10' test.output
 
-curl -o test.output2 http://localhost:8080/mrsc?prometheus
-
-grep 'http_requests_count_total{status="200 OK"}  11' test.output2
-grep 'http_requests_count_total{status="404 Not Found"}  10' test.output2
