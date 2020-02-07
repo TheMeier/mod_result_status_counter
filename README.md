@@ -24,12 +24,12 @@ LoadModule result_status_counter_module modules/mod_result_status_counter.so
         ...
 
 ~ curl http://localhost/mrsc?prometheus
-# HELP http_requests_total The total number of HTTP requests.
-# TYPE http_requests_total counter
-http_requests_total{status="100 Continue"}  0
-http_requests_total{status="101 Switching Protocols"}  0
-http_requests_total{status="102 Processing"}  0
-http_requests_total{status="200 OK"}  11
+# HELP http_requests_count_total The total number of HTTP requests.
+# TYPE http_requests_count_total counter
+http_requests_count_total{status="100 Continue"}  0
+http_requests_count_total{status="101 Switching Protocols"}  0
+http_requests_count_total{status="102 Processing"}  0
+http_requests_count_total{status="200 OK"}  11
 ...
 ```
 

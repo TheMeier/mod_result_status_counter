@@ -35,5 +35,5 @@ grep '{ "404 Not Found": 10 }' test.output
 
 curl -o test.output2 http://localhost:8080/mrsc?prometheus
 
-grep 'http_requests_total{status="200 OK"}  11' test.output2
-grep 'http_requests_total{status="404 Not Found"}  10' test.output2
+grep 'http_requests_count_total{status="200 OK"}  11' test.output2
+grep 'http_requests_count_total{status="404 Not Found"}  10' test.output2
