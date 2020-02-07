@@ -41,107 +41,106 @@
 #include <unistd.h>
 #endif
 
-
-static const char * const status_lines[RESPONSE_CODES] =
-{
-    "100 Continue",
-    "101 Switching Protocols",
-    "102 Processing",
-#define LEVEL_200  3
-    "200 OK",
-    "201 Created",
-    "202 Accepted",
-    "203 Non-Authoritative Information",
-    "204 No Content",
-    "205 Reset Content",
-    "206 Partial Content",
-    "207 Multi-Status",
-    "208 Already Reported",
-    NULL, /* 209 */
-    NULL, /* 210 */
-    NULL, /* 211 */
-    NULL, /* 212 */
-    NULL, /* 213 */
-    NULL, /* 214 */
-    NULL, /* 215 */
-    NULL, /* 216 */
-    NULL, /* 217 */
-    NULL, /* 218 */
-    NULL, /* 219 */
-    NULL, /* 220 */
-    NULL, /* 221 */
-    NULL, /* 222 */
-    NULL, /* 223 */
-    NULL, /* 224 */
-    NULL, /* 225 */
-    "226 IM Used",
+static const char *const status_lines[RESPONSE_CODES] =
+    {
+        "100 Continue",
+        "101 Switching Protocols",
+        "102 Processing",
+#define LEVEL_200 3
+        "200 OK",
+        "201 Created",
+        "202 Accepted",
+        "203 Non-Authoritative Information",
+        "204 No Content",
+        "205 Reset Content",
+        "206 Partial Content",
+        "207 Multi-Status",
+        "208 Already Reported",
+        NULL, /* 209 */
+        NULL, /* 210 */
+        NULL, /* 211 */
+        NULL, /* 212 */
+        NULL, /* 213 */
+        NULL, /* 214 */
+        NULL, /* 215 */
+        NULL, /* 216 */
+        NULL, /* 217 */
+        NULL, /* 218 */
+        NULL, /* 219 */
+        NULL, /* 220 */
+        NULL, /* 221 */
+        NULL, /* 222 */
+        NULL, /* 223 */
+        NULL, /* 224 */
+        NULL, /* 225 */
+        "226 IM Used",
 #define LEVEL_300 30
-    "300 Multiple Choices",
-    "301 Moved Permanently",
-    "302 Found",
-    "303 See Other",
-    "304 Not Modified",
-    "305 Use Proxy",
-    NULL, /* 306 */
-    "307 Temporary Redirect",
-    "308 Permanent Redirect",
+        "300 Multiple Choices",
+        "301 Moved Permanently",
+        "302 Found",
+        "303 See Other",
+        "304 Not Modified",
+        "305 Use Proxy",
+        NULL, /* 306 */
+        "307 Temporary Redirect",
+        "308 Permanent Redirect",
 #define LEVEL_400 39
-    "400 Bad Request",
-    "401 Unauthorized",
-    "402 Payment Required",
-    "403 Forbidden",
-    "404 Not Found",
-    "405 Method Not Allowed",
-    "406 Not Acceptable",
-    "407 Proxy Authentication Required",
-    "408 Request Timeout",
-    "409 Conflict",
-    "410 Gone",
-    "411 Length Required",
-    "412 Precondition Failed",
-    "413 Request Entity Too Large",
-    "414 Request-URI Too Long",
-    "415 Unsupported Media Type",
-    "416 Requested Range Not Satisfiable",
-    "417 Expectation Failed",
-    NULL, /* 418 */
-    NULL, /* 419 */
-    NULL, /* 420 */
-    NULL, /* 421 */
-    "422 Unprocessable Entity",
-    "423 Locked",
-    "424 Failed Dependency",
-    NULL, /* 425 */
-    "426 Upgrade Required",
-    NULL, /* 427 */
-    "428 Precondition Required",
-    "429 Too Many Requests",
-    NULL, /* 430 */
-    "431 Request Header Fields Too Large",
+        "400 Bad Request",
+        "401 Unauthorized",
+        "402 Payment Required",
+        "403 Forbidden",
+        "404 Not Found",
+        "405 Method Not Allowed",
+        "406 Not Acceptable",
+        "407 Proxy Authentication Required",
+        "408 Request Timeout",
+        "409 Conflict",
+        "410 Gone",
+        "411 Length Required",
+        "412 Precondition Failed",
+        "413 Request Entity Too Large",
+        "414 Request-URI Too Long",
+        "415 Unsupported Media Type",
+        "416 Requested Range Not Satisfiable",
+        "417 Expectation Failed",
+        NULL, /* 418 */
+        NULL, /* 419 */
+        NULL, /* 420 */
+        NULL, /* 421 */
+        "422 Unprocessable Entity",
+        "423 Locked",
+        "424 Failed Dependency",
+        NULL, /* 425 */
+        "426 Upgrade Required",
+        NULL, /* 427 */
+        "428 Precondition Required",
+        "429 Too Many Requests",
+        NULL, /* 430 */
+        "431 Request Header Fields Too Large",
 #define LEVEL_500 71
-    "500 Internal Server Error",
-    "501 Not Implemented",
-    "502 Bad Gateway",
-    "503 Service Unavailable",
-    "504 Gateway Timeout",
-    "505 HTTP Version Not Supported",
-    "506 Variant Also Negotiates",
-    "507 Insufficient Storage",
-    "508 Loop Detected",
-    NULL, /* 509 */
-    "510 Not Extended",
-    "511 Network Authentication Required"
-};
+        "500 Internal Server Error",
+        "501 Not Implemented",
+        "502 Bad Gateway",
+        "503 Service Unavailable",
+        "504 Gateway Timeout",
+        "505 HTTP Version Not Supported",
+        "506 Variant Also Negotiates",
+        "507 Insufficient Storage",
+        "508 Loop Detected",
+        NULL, /* 509 */
+        "510 Not Extended",
+        "511 Network Authentication Required"};
 
-apr_shm_t *mrsc_shm; /* Pointer to shared memory block */
-char *shmfilename; /* Shared memory file name, used on some systems */
+apr_shm_t *mrsc_shm;                          /* Pointer to shared memory block */
+char *shmfilename;                            /* Shared memory file name, used on some systems */
 static apr_global_mutex_t *mrsc_mutex = NULL; /* Lock around shared memory segment access */
 static char mrsc_mutex_name[L_tmpnam];
 
 static const char *mrsc_mutex_type = "mrsc-shm";
 
 /* Data structure for the counters*/
-typedef struct mrsc_data {
+typedef struct mrsc_data
+{
     apr_uint64_t request_status[RESPONSE_CODES];
 } mrsc_data;
 
@@ -151,7 +150,8 @@ typedef struct mrsc_data {
  * on restarts. It assures that the new children will not talk to a stale
  * shared memory segment.
  */
-static apr_status_t shm_cleanup_wrapper(void *unused) {
+static apr_status_t shm_cleanup_wrapper(void *unused)
+{
     if (mrsc_shm)
         return apr_shm_destroy(mrsc_shm);
     return OK;
@@ -163,13 +163,12 @@ static apr_status_t shm_cleanup_wrapper(void *unused) {
  */
 
 static int mrsc_post_config(apr_pool_t *pconf, apr_pool_t *plog,
-                             apr_pool_t *ptemp, server_rec *s)
+                            apr_pool_t *ptemp, server_rec *s)
 {
     apr_status_t rs;
     mrsc_data *base;
     const char *tempdir;
     int i;
-
 
     /*
      * Do nothing if we are not creating the final configuration.
@@ -181,11 +180,12 @@ static int mrsc_post_config(apr_pool_t *pconf, apr_pool_t *plog,
     const char *userdata_key = "mrsc_init";
 
     apr_pool_userdata_get(&data, userdata_key, s->process->pool);
-    if (!data) {
-    	apr_pool_userdata_set((const void *)1, userdata_key,
-    			apr_pool_cleanup_null, s->process->pool);
-    	return OK;
-     }
+    if (!data)
+    {
+        apr_pool_userdata_set((const void *)1, userdata_key,
+                              apr_pool_cleanup_null, s->process->pool);
+        return OK;
+    }
 
     /*
      * The shared memory allocation routines take a file name.
@@ -195,7 +195,8 @@ static int mrsc_post_config(apr_pool_t *pconf, apr_pool_t *plog,
      * temporary directory, which APR can point us to.
      */
     rs = apr_temp_dir_get(&tempdir, pconf);
-    if (APR_SUCCESS != rs) {
+    if (APR_SUCCESS != rs)
+    {
         ap_log_error(APLOG_MARK, APLOG_ERR, rs, s,
                      "Failed to find temporary directory");
         return HTTP_INTERNAL_SERVER_ERROR;
@@ -212,8 +213,9 @@ static int mrsc_post_config(apr_pool_t *pconf, apr_pool_t *plog,
 
     /* Now create that segment */
     rs = apr_shm_create(&mrsc_shm, sizeof(mrsc_data),
-                        (const char *) shmfilename, pconf);
-    if (APR_SUCCESS != rs) {
+                        (const char *)shmfilename, pconf);
+    if (APR_SUCCESS != rs)
+    {
         ap_log_error(APLOG_MARK, APLOG_ERR, rs, s,
                      "Failed to create shared memory segment on file %s",
                      shmfilename);
@@ -222,16 +224,18 @@ static int mrsc_post_config(apr_pool_t *pconf, apr_pool_t *plog,
 
     /* Created it, now let's zero it out */
     base = (mrsc_data *)apr_shm_baseaddr_get(mrsc_shm);
-    for (i = 0; i < RESPONSE_CODES; ++i) {
-    	base->request_status[i] = 0;
+    for (i = 0; i < RESPONSE_CODES; ++i)
+    {
+        base->request_status[i] = 0;
     }
 
     /* Create global mutex */
     tmpnam(mrsc_mutex_name);
 
     rs = apr_global_mutex_create(&mrsc_mutex, mrsc_mutex_name,
-                                  APR_LOCK_DEFAULT, s->process->pool);
-    if (APR_SUCCESS != rs) {
+                                 APR_LOCK_DEFAULT, s->process->pool);
+    if (APR_SUCCESS != rs)
+    {
         return HTTP_INTERNAL_SERVER_ERROR;
     }
 
@@ -261,7 +265,8 @@ static void mrsc_child_init(apr_pool_t *p, server_rec *s)
     rs = apr_global_mutex_child_init(&mrsc_mutex,
                                      apr_global_mutex_lockfile(mrsc_mutex),
                                      p);
-    if (APR_SUCCESS != rs) {
+    if (APR_SUCCESS != rs)
+    {
         ap_log_error(APLOG_MARK, APLOG_CRIT, rs, s,
                      "Failed to reopen mutex %s in child",
                      mrsc_mutex_type);
@@ -285,40 +290,53 @@ static int mrsc_handler(request_rec *r)
     mrsc_data *base;
     int i;
 
-    if (strcmp(r->handler, "request_status_counter")) {
+    if (strcmp(r->handler, "request_status_counter"))
+    {
         return DECLINED;
     }
 
     base = (mrsc_data *)apr_shm_baseaddr_get(mrsc_shm);
 
-    if (!r->header_only) {
-        if (r->args) {
-            if (ap_strstr_c(r->args, "prometheus")) {
+    if (!r->header_only)
+    {
+        if (r->args)
+        {
+            if (ap_strstr_c(r->args, "prometheus"))
+            {
                 r->content_type = "text/plain; version=0.0.4";
-                ap_rputs("# HELP http_requests_count_total The total number of HTTP requests.\n",r);
-                ap_rputs("# TYPE http_requests_count_total counter\n",r);
-                for (i = 0; i < RESPONSE_CODES; ++i) {
-                    if (status_lines[i] == '\0') {
-                	   ap_rprintf(r, "http_requests_count_total{status=\"%s apache code %d\"}  %d\n", "unknown", i ,base->request_status[i]);
-                    } else {
-                        ap_rprintf(r, "http_requests_count_total{status=\"%s\"}  %d\n", status_lines[i] ,base->request_status[i]);
+                ap_rputs("# HELP http_requests_count_total The total number of HTTP requests.\n", r);
+                ap_rputs("# TYPE http_requests_count_total counter\n", r);
+                for (i = 0; i < RESPONSE_CODES; ++i)
+                {
+                    if (status_lines[i] == '\0')
+                    {
+                        ap_rprintf(r, "http_requests_count_total{status=\"%s apache code %d\"}  %d\n", "unknown", i, base->request_status[i]);
+                    }
+                    else
+                    {
+                        ap_rprintf(r, "http_requests_count_total{status=\"%s\"}  %d\n", status_lines[i], base->request_status[i]);
                     }
                 }
             }
-        } else {
+        }
+        else
+        {
             r->content_type = "text/json";
 
             ap_rputs("[\n", r);
-            for (i = 0; i < RESPONSE_CODES; ++i) {
-                if (status_lines[i] == '\0') {
-            	   ap_rprintf(r, "\t{ \"%s apache code %d\": %d },\n", "unknown", i ,base->request_status[i]);
-                } else {
-                    ap_rprintf(r, "\t{ \"%s\": %d },\n", status_lines[i] ,base->request_status[i]);
+            for (i = 0; i < RESPONSE_CODES; ++i)
+            {
+                if (status_lines[i] == '\0')
+                {
+                    ap_rprintf(r, "\t{ \"%s apache code %d\": %d },\n", "unknown", i, base->request_status[i]);
+                }
+                else
+                {
+                    ap_rprintf(r, "\t{ \"%s\": %d },\n", status_lines[i], base->request_status[i]);
                 }
             }
             ap_rputs("]", r);
         }
-
     }
     return OK;
 }
@@ -333,10 +351,10 @@ static int mrsc_request_hook(request_rec *r)
     base->request_status[ap_index_of_response(r->status)]++;
     apr_global_mutex_unlock(mrsc_mutex);
 
-	ap_log_error(APLOG_MARK, APLOG_DEBUG, 0, r->server,
-             "counter %i is at %d", r->status, base->request_status[ap_index_of_response(r->status)]);
+    ap_log_error(APLOG_MARK, APLOG_DEBUG, 0, r->server,
+                 "counter %i is at %d", r->status, base->request_status[ap_index_of_response(r->status)]);
 
-	return OK;
+    return OK;
 }
 
 static void mrsc_register_hooks(apr_pool_t *p)
@@ -344,18 +362,17 @@ static void mrsc_register_hooks(apr_pool_t *p)
     ap_hook_post_config(mrsc_post_config, NULL, NULL, APR_HOOK_MIDDLE);
     ap_hook_child_init(mrsc_child_init, NULL, NULL, APR_HOOK_MIDDLE);
     ap_hook_handler(mrsc_handler, NULL, NULL, APR_HOOK_MIDDLE);
-    ap_hook_log_transaction(mrsc_request_hook,NULL,NULL,APR_HOOK_LAST);
-
+    ap_hook_log_transaction(mrsc_request_hook, NULL, NULL, APR_HOOK_LAST);
 }
 
 /* Dispatch list for API hooks */
 module AP_MODULE_DECLARE_DATA result_status_counter_module =
-{
-	    STANDARD20_MODULE_STUFF,
-	    NULL,
-	    NULL,
-	    NULL,
-	    NULL,
-	    NULL,
-	    mrsc_register_hooks   /* register hooks                      */
+    {
+        STANDARD20_MODULE_STUFF,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        NULL,
+        mrsc_register_hooks /* register hooks                      */
 };
