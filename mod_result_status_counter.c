@@ -106,7 +106,7 @@ static const char *const status_lines[RESPONSE_CODES] =
         NULL, /* 418 */
         NULL, /* 419 */
         NULL, /* 420 */
-        NULL, /* 421 */
+        "421 Misdirected Request",
         "422 Unprocessable Entity",
         "423 Locked",
         "424 Failed Dependency",
@@ -117,7 +117,27 @@ static const char *const status_lines[RESPONSE_CODES] =
         "429 Too Many Requests",
         NULL, /* 430 */
         "431 Request Header Fields Too Large",
-#define LEVEL_500 71
+        NULL, /* 432 */
+        NULL, /* 433 */
+        NULL, /* 434 */
+        NULL, /* 435 */
+        NULL, /* 436 */
+        NULL, /* 437 */
+        NULL, /* 438 */
+        NULL, /* 439 */
+        NULL, /* 440 */
+        NULL, /* 441 */
+        NULL, /* 442 */
+        NULL, /* 443 */
+        NULL, /* 444 */
+        NULL, /* 445 */
+        NULL, /* 446 */
+        NULL, /* 447 */
+        NULL, /* 448 */
+        NULL, /* 449 */
+        NULL, /* 450 */
+        "451 Unavailable For Legal Reasons",
+#define LEVEL_500 91
         "500 Internal Server Error",
         "501 Not Implemented",
         "502 Bad Gateway",
