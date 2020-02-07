@@ -154,7 +154,7 @@ static const char *const status_lines[RESPONSE_CODES] =
 apr_shm_t *mrsc_shm;                          /* Pointer to shared memory block */
 char *shmfilename;                            /* Shared memory file name, used on some systems */
 static apr_global_mutex_t *mrsc_mutex = NULL; /* Lock around shared memory segment access */
-static char mrsc_mutex_name[L_tmpnam];
+static char *mrsc_mutex_name = NULL;
 
 static const char *mrsc_mutex_type = "mrsc-shm";
 
@@ -250,7 +250,7 @@ static int mrsc_post_config(apr_pool_t *pconf, apr_pool_t *plog,
     }
 
     /* Create global mutex */
-    tmpnam(mrsc_mutex_name);
+    mrsc_mutex_name = apr_psprintf(pconf, "/tmp/mrsc_mutex.%ld", (long int) getpid());
 
     rs = apr_global_mutex_create(&mrsc_mutex, mrsc_mutex_name,
                                  APR_LOCK_DEFAULT, s->process->pool);
@@ -302,11 +302,6 @@ static void mrsc_child_init(apr_pool_t *p, server_rec *s)
 /* The sample content handler */
 static int mrsc_handler(request_rec *r)
 {
-    int gotlock = 0;
-    int camped;
-    apr_time_t startcamp;
-    apr_int64_t timecamped;
-    apr_status_t rs;
     mrsc_data *base;
     int i;
 
@@ -324,13 +319,13 @@ static int mrsc_handler(request_rec *r)
         ap_rputs("# TYPE http_requests_count_total counter\n", r);
         for (i = 0; i < RESPONSE_CODES; ++i)
         {
-            if (status_lines[i] == '\0')
+            if (status_lines[i])
             {
-                ap_rprintf(r, "http_requests_count_total{status=\"%s apache code %d\"}  %d\n", "unknown", i, base->request_status[i]);
+                ap_rprintf(r, "http_requests_count_total{status=\"%s\"}  %lu\n", status_lines[i], base->request_status[i]);
             }
             else
             {
-                ap_rprintf(r, "http_requests_count_total{status=\"%s\"}  %d\n", status_lines[i], base->request_status[i]);
+                ap_rprintf(r, "http_requests_count_total{status=\"%s apache code %d\"}  %lu\n", "unknown", i, base->request_status[i]);
             }
         }
     }
@@ -339,7 +334,6 @@ static int mrsc_handler(request_rec *r)
 
 static int mrsc_request_hook(request_rec *r)
 {
-    apr_status_t rs;
     mrsc_data *base;
 
     apr_global_mutex_lock(mrsc_mutex);
@@ -348,7 +342,7 @@ static int mrsc_request_hook(request_rec *r)
     apr_global_mutex_unlock(mrsc_mutex);
 
     ap_log_error(APLOG_MARK, APLOG_DEBUG, 0, r->server,
-                 "counter %i is at %d", r->status, base->request_status[ap_index_of_response(r->status)]);
+                 "counter %i is at %lu", r->status, base->request_status[ap_index_of_response(r->status)]);
 
     return OK;
 }
