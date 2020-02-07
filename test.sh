@@ -33,6 +33,6 @@ ab -n 10 http://localhost:8080/
 curl -o test.output -q http://localhost:8080/mrsc
 
 cat test.output
-grep 'http_requests_count_total{status="200 OK"}  11' test.output
+grep 'http_requests_count_total{status="200 OK"}  10' test.output
 grep 'http_requests_count_total{status="404 Not Found"}  10' test.output
 
