@@ -1,3 +1,13 @@
+libapache2-mod-result-status-counter (2.0.0-1) unstable; urgency=medium
+
+  * fix all compiler warnings
+  * Update status_lines[RESPONSE_CODES]
+  * remove non prometheus endpoint fixes #4
+  * format code
+  * rename metric to http_requests_total
+
+ -- Christoph Maser <christoph.maser@1und1.de>  Fri, 07 Feb 2017 11:36:12 +0200
+
 libapache2-mod-result-status-counter (1.1.0-1) unstable; urgency=medium
 
   * add simple text only prometheus output
